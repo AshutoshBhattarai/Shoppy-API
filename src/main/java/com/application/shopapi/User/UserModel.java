@@ -1,5 +1,6 @@
 package com.application.shopapi.User;
 
+import com.application.shopapi.Customer.CustomerModel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class UserModel {
     @Id
     @GeneratedValue

@@ -1,5 +1,6 @@
 package com.application.shopapi.User;
 
+import com.application.shopapi.User.RequestHandler.CustomerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -45,5 +47,38 @@ public class UserController {
     public UserModel getUserById(@PathVariable UUID id) {
 
         return userService.getUserById(id);
+    }
+
+    @PutMapping("/update")
+    public String updateUser(@RequestBody UserModel user) {
+        System.out.println(user);
+        String name = user.getUsername();
+        UUID id = user.getId();
+        return userService.updateUser(id, name);
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteUser(@RequestBody UserModel user) {
+        return userService.deleteUser(user);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> saveCustomer(@RequestBody CustomerRequest req) {
+        if (req.getUser().getRole() == UserModel.Role.CUSTOMER) {
+            System.out.println(req);
+            boolean isInserted = userService.saveCustomer(req);
+            return ResponseEntity.ok().build();
+        } else if (req.getUser().getRole() == UserModel.Role.ADMIN) {
+            boolean isSaved = userService.saveCustomer(req);
+            return ResponseEntity.status(200).build();
+        }
+        return ResponseEntity.internalServerError().build();
+    }
+
+    @GetMapping("/cust/all")
+    public List<Object[]> findCustomers()
+    {
+        System.out.println(userService.findCustomers());
+        return userService.findCustomers();
     }
 }
