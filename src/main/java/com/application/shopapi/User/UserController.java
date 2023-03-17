@@ -80,7 +80,7 @@ public class UserController {
         return ResponseEntity.internalServerError().build();
     }
 
-    @GetMapping("/cust/all")
+    @GetMapping("/customer/all")
     public List<UserResponse> findCustomers()
     {
         System.out.println(userService.findCustomers());

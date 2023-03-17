@@ -10,10 +10,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface UserRepo extends JpaRepository<UserModel, UUID> {
+    Optional<UserModel> findByEmail(String email);
+    Optional<UserModel> findByUsername(String username);
 
     @Query(value = "Select * from users WHERE user_id = :id", nativeQuery = true)
     public UserModel findUserById(@Param("id") UUID id);
