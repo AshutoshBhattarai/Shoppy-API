@@ -1,6 +1,6 @@
 package com.application.shopapi.User;
 
-import com.application.shopapi.Customer.CustomerModel;
+import com.application.shopapi.ExtraModel.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,9 +27,5 @@ public class UserModel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     Role role;
-
-    enum Role {
-        CUSTOMER, ADMIN
-    }
 }
 

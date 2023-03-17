@@ -3,6 +3,9 @@ package com.application.shopapi.Products;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,7 +18,7 @@ public class Category {
     @Column(name = "category_id")
     int id;
     String title;
-    @OneToOne(mappedBy = "category")
-    ProductModel products;
+    @OneToMany(mappedBy = "category")
+    List<ProductModel> products = new ArrayList<>();
 
 }

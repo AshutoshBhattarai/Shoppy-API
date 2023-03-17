@@ -1,6 +1,9 @@
 package com.application.shopapi.User;
 
-import com.application.shopapi.User.RequestHandler.CustomerRequest;
+import com.application.shopapi.ExtraModel.APIResponse;
+import com.application.shopapi.ExtraModel.Role;
+import com.application.shopapi.User.RequestHandler.UserRequest;
+import com.application.shopapi.User.RequestHandler.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -63,12 +66,14 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveCustomer(@RequestBody CustomerRequest req) {
-        if (req.getUser().getRole() == UserModel.Role.CUSTOMER) {
+    public ResponseEntity<?> saveCustomer(@RequestBody UserRequest req) {
+        if (req.getRole() == Role.CUSTOMER) {
             System.out.println(req);
             boolean isInserted = userService.saveCustomer(req);
-            return ResponseEntity.ok().build();
-        } else if (req.getUser().getRole() == UserModel.Role.ADMIN) {
+            String msg = "User Inserted Successfully";
+            return ResponseEntity.ok()
+                    .body(new APIResponse(HttpStatus.OK,200,msg, LocalDateTime.now()));
+        } else if (req.getRole() == Role.ADMIN) {
             boolean isSaved = userService.saveCustomer(req);
             return ResponseEntity.status(200).build();
         }
@@ -76,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/cust/all")
-    public List<Object[]> findCustomers()
+    public List<UserResponse> findCustomers()
     {
         System.out.println(userService.findCustomers());
         return userService.findCustomers();

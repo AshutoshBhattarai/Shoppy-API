@@ -20,7 +20,7 @@ public class ProductModel {
     String image;
     int stock;
     float rating;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     Category category;
 
