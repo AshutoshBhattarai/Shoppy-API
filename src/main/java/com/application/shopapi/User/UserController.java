@@ -24,7 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private Logger log = LoggerFactory.getLogger(UserController.class);
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
 
     @GetMapping
@@ -61,29 +61,23 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public String deleteUser(@RequestBody UserModel user) {
-        return userService.deleteUser(user);
+    public ResponseEntity<?> deleteUser(@RequestBody UserModel user) {
+        String msg = userService.deleteUser(user);
+        return ResponseEntity
+                .ok()
+                .body(new APIResponse(HttpStatus.OK, 200, msg, LocalDateTime.now()));
     }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveCustomer(@RequestBody UserRequest req) {
-        if (req.getRole() == Role.CUSTOMER) {
-            System.out.println(req);
-            boolean isInserted = userService.saveCustomer(req);
-            String msg = "User Inserted Successfully";
-            return ResponseEntity.ok()
-                    .body(new APIResponse(HttpStatus.OK,200,msg, LocalDateTime.now()));
-        } else if (req.getRole() == Role.ADMIN) {
-            boolean isSaved = userService.saveCustomer(req);
-            return ResponseEntity.status(200).build();
-        }
-        return ResponseEntity.internalServerError().build();
+        String msg = userService.saveUser(req);
+        return ResponseEntity
+                .ok()
+                .body(new APIResponse(HttpStatus.OK, 200, msg, LocalDateTime.now()));
     }
 
     @GetMapping("/customer/all")
-    public List<UserResponse> findCustomers()
-    {
-        System.out.println(userService.findCustomers());
+    public List<UserResponse> findCustomers() {
         return userService.findCustomers();
     }
 }

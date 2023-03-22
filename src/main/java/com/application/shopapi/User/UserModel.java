@@ -16,6 +16,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
+@Builder
 @Table(name = "users")
 public class UserModel implements UserDetails {
     @Id

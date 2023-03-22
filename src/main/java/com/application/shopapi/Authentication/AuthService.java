@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
+    @Autowired
     AuthenticationManager manager;
     @Autowired
     JwtService jwtService;
@@ -21,9 +22,8 @@ public class AuthService {
         manager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(), request.getPassword()
         ));
-        var user = userRepo.findByEmail(request.getUsername()).orElseThrow();
+        var user = userRepo.findByUsername(request.getUsername()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-
-        return AuthResponse.builder().token(jwtToken).build();
+        return AuthResponse.builder().token("Bearer "+jwtToken).build();
     }
 }
