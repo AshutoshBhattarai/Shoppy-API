@@ -2,8 +2,10 @@ package com.application.shopapi.User;
 
 import com.application.shopapi.ExtraModel.APIResponse;
 import com.application.shopapi.ExtraModel.Role;
+import com.application.shopapi.User.RequestHandler.AdminResponse;
 import com.application.shopapi.User.RequestHandler.UserRequest;
 import com.application.shopapi.User.RequestHandler.UserResponse;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,7 +72,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveCustomer(@RequestBody UserRequest req) {
+    public ResponseEntity<?> saveCustomer(@RequestBody @Valid UserRequest req) {
         String msg = userService.saveUser(req);
         return ResponseEntity
                 .ok()
@@ -80,4 +83,7 @@ public class UserController {
     public List<UserResponse> findCustomers() {
         return userService.findCustomers();
     }
+
+    @GetMapping("/admin/all")
+    public List<AdminResponse> findAdmin(){ return userService.findAdmin(); }
 }

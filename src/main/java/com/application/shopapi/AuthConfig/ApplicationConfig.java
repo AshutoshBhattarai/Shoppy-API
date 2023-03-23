@@ -1,4 +1,4 @@
-package com.application.shopapi.Config;
+package com.application.shopapi.AuthConfig;
 
 import com.application.shopapi.User.UserRepo;
 import lombok.RequiredArgsConstructor;

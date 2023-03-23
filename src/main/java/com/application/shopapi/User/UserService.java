@@ -5,13 +5,16 @@ import com.application.shopapi.Admin.AdminRepo;
 import com.application.shopapi.Customer.CustomerModel;
 import com.application.shopapi.Customer.CustomerRepo;
 import com.application.shopapi.ExtraModel.Role;
+import com.application.shopapi.User.RequestHandler.AdminResponse;
 import com.application.shopapi.User.RequestHandler.UserRequest;
 import com.application.shopapi.User.RequestHandler.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,13 +71,14 @@ public class UserService {
                 admin.setFirstname(req.getFirstname());
                 admin.setLastname(req.getLastname());
                 admin.setMiddlename(req.getMiddlename());
+                admin.setAddress(req.getAddress());
                 admin.setDob(req.getDob());
                 adminRepo.save(admin);
                 return "Admin created successfully";
             }
 
-        } catch (Exception e) {
-            return e.getMessage();
+        } catch (DataIntegrityViolationException e) {
+            return e.getCause().getMessage();
         }
         return null;
     }
@@ -82,5 +86,7 @@ public class UserService {
     public List<UserResponse> findCustomers() {
         return userRepo.findCustomers();
     }
+
+    public List<AdminResponse> findAdmin(){ return userRepo.findAdmins();}
 
 }

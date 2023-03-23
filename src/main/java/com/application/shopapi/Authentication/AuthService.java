@@ -1,13 +1,13 @@
 package com.application.shopapi.Authentication;
 
-import com.application.shopapi.Config.JwtService;
-import com.application.shopapi.User.UserModel;
+import com.application.shopapi.AuthConfig.JwtService;
 import com.application.shopapi.User.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 public class AuthService {
@@ -23,7 +23,9 @@ public class AuthService {
                 request.getUsername(), request.getPassword()
         ));
         var user = userRepo.findByUsername(request.getUsername()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        HashMap<String, Object> extras = new HashMap<String, Object>();
+        extras.put("role", user.getRole());
+        var jwtToken = jwtService.generateToken(extras,user);
         return AuthResponse.builder().token("Bearer "+jwtToken).build();
     }
 }
