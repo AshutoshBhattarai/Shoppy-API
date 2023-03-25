@@ -2,8 +2,10 @@ package com.application.shopapi.User;
 
 import com.application.shopapi.ExtraModel.APIResponse;
 import com.application.shopapi.ExtraModel.Role;
+import com.application.shopapi.User.RequestHandler.AdminResponse;
 import com.application.shopapi.User.RequestHandler.UserRequest;
 import com.application.shopapi.User.RequestHandler.UserResponse;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +27,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private Logger log = LoggerFactory.getLogger(UserController.class);
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
 
     @GetMapping
@@ -61,29 +64,26 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public String deleteUser(@RequestBody UserModel user) {
-        return userService.deleteUser(user);
+    public ResponseEntity<?> deleteUser(@RequestBody UserModel user) {
+        String msg = userService.deleteUser(user);
+        return ResponseEntity
+                .ok()
+                .body(new APIResponse(HttpStatus.OK, 200, msg, LocalDateTime.now()));
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveCustomer(@RequestBody UserRequest req) {
-        if (req.getRole() == Role.CUSTOMER) {
-            System.out.println(req);
-            boolean isInserted = userService.saveCustomer(req);
-            String msg = "User Inserted Successfully";
-            return ResponseEntity.ok()
-                    .body(new APIResponse(HttpStatus.OK,200,msg, LocalDateTime.now()));
-        } else if (req.getRole() == Role.ADMIN) {
-            boolean isSaved = userService.saveCustomer(req);
-            return ResponseEntity.status(200).build();
-        }
-        return ResponseEntity.internalServerError().build();
+    public ResponseEntity<?> saveCustomer(@RequestBody @Valid UserRequest req) {
+        String msg = userService.saveUser(req);
+        return ResponseEntity
+                .ok()
+                .body(new APIResponse(HttpStatus.OK, 200, msg, LocalDateTime.now()));
     }
 
     @GetMapping("/customer/all")
-    public List<UserResponse> findCustomers()
-    {
-        System.out.println(userService.findCustomers());
+    public List<UserResponse> findCustomers() {
         return userService.findCustomers();
     }
+
+    @GetMapping("/admin/all")
+    public List<AdminResponse> findAdmin(){ return userService.findAdmin(); }
 }

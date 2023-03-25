@@ -1,9 +1,6 @@
 package com.application.shopapi.ExtraModel;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 //@RequiredArgsConstructor
 public class APIResponse {
     HttpStatus status;

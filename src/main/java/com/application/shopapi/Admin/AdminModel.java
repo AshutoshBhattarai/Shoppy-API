@@ -29,6 +29,7 @@ public class AdminModel {
     LocalDate dob;
     @Column(updatable = false, nullable = false)
     LocalDate createdAt = LocalDate.now();
+    String address;
     LocalDate updatedAt = LocalDate.now();
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
